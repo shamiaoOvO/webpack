@@ -1,12 +1,14 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
+const VueLoaderPlugin = require("vue-loader/lib/plugin");
 module.exports = {
     // 打包模式  development |  production
     mode: "production",
     // 项目入口
     entry: {
         main: ["babel-polyfill", "./src/index.js"],
-        login: "./src/login.js"
+        login: "./src/login.js",
+        demo: "./src/vue/app.js"
     },
     // 项目出口
     output: {
@@ -18,6 +20,12 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "./src/index.html",
             title: "jQuery的隔行变色"
+        }),
+        new VueLoaderPlugin(),
+        new HtmlWebpackPlugin({
+            filename: "login.html",
+            template: "./src/login.html",
+            chunks: ["login"]
         })
     ],
     module: {
@@ -41,6 +49,10 @@ module.exports = {
                 test: /\.js$/,
                 use: "babel-loader",
                 exclude: /node_modules/
+            },
+            {
+                test: /\.vue$/,
+                loader: "vue-loader",
             }
         ],
     },
@@ -51,7 +63,7 @@ module.exports = {
         },
         extensions: [".js"],
     },
-    /* externals: {
+    externals: {
         jquery: 'jQuery'
-    } */
+    }
 }
